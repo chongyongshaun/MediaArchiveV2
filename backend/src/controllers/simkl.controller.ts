@@ -40,3 +40,21 @@ export const getFullSimklActivities = async (req: Request, res: Response) => {
         res.status(500).json({ error: "Failed to fetch all Simkl activities" });
     }
 };
+
+const tempDateFromVal = "2024-12-05T20:14:59Z";
+export const getUpdatedSimklData = async (req: Request, res: Response) => {
+    try {
+        const response = await axios.get(`https://api.simkl.com/sync/all-items/shows/?date_from=${tempDateFromVal}`, { headers: authHeader })
+        res.status(200).json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: "failed to fetch updated data" });
+    }
+}
+export const getUpdatedRatingsData = async (req: Request, res: Response) => {
+    try {
+        const response = await axios.get(`https://api.simkl.com/sync/ratings/?date_from=${tempDateFromVal}`, { headers: authHeader })
+        res.status(200).json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: "failed to fetch updated data of items with changed ratings" });
+    }
+}
