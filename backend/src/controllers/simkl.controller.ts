@@ -40,10 +40,22 @@ export const syncAllSimklData = async (req: Request, res: Response) => {
             status: item.status,
             simklId: item.show.ids.simkl
         }));
-        //callback function for .map() it applies the function to every single element in the data array and returns a new array
-
         for (const show of shows) {
             await Show.findOneAndUpdate({ simklId: show.simklId }, show, { upsert: true });
+        }
+        //callback function for .map() it applies the function to every single element in the data array and returns a new array
+        const movies = data.movies.map((item: any)=>{
+            return {
+                title: item.movie.title,
+                userRating: item.user_rating,
+                status: item.status,
+                simklId: item.movie.ids.simkl
+            }
+        })
+        for (const movie of movies) { 
+            //first param is the filter, matches the simkl id to the curr movie obj and the 2nd param is the data to update with, which is the entire curr movie obj
+            //upsert is true, so if the movie is not found, it will be created
+            await Movie.findOneAndUpdate({ simklId: movie.simklId }, movie, { upsert: true });
         }
 
         res.status(200).json({ message: "Shows data synced successfully" });
