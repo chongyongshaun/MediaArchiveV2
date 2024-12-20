@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Request, Response } from "express";
 import { config } from "../config/dotenv.config";
+import Token from "../models/Token";
 
 export const generateAuthUrl = (req: Request, res: Response) => {
     const { clientId, redirectUri } = config.simkl;
@@ -27,9 +28,9 @@ export const handleCallback = async (req: Request, res: Response): Promise<any> 
         });
 
         const { access_token } = tokenResponse.data;
-        console.log(access_token)
-        // Save access_token securely (e.g., database or user session)
-        // For simplicity, we return it here
+        const token = new Token({ accessToken : access_token });
+        await token.save();
+
         res.status(200).json({ access_token });
     } catch (error) {
         console.error(error);

@@ -12,5 +12,6 @@ export const config = {
     anilist: {
         clientId: process.env.ANILIST_CLIENT_ID,
         clientSecret: process.env.ANILIST_CLIENT_SECRET,
-    }
+    },
+    mongodbURI: process.env.MONGO_URI
 };
